@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCF Bible Study (The Forge) - Q&A Platform</title>
+    <link rel="stylesheet" href="rcf-qa-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="church-header">
+            <div class="church-info">
+                <div class="church-logos">
+                    <img src="rcf-logo-white.png.png" alt="RCF Logo">
+                    <img src="the-forge-logo.png.png" alt="The Forge Logo">
+                </div>
+                <h1 class="church-name">RCFLASUOJO Bible Study (The Forge)</h1>
+                <p class="church-motto">"Ask, and it will be given to you; seek, and you will find. Your free to ask your questions; you will get a response"</p>
+            </div>
+            <nav class="nav-tabs">
+                <button class="tab-btn active" onclick="switchTab('home')">Home</button>
+                <button class="tab-btn" onclick="switchTab('ask')">Ask Question</button>
+                <button class="tab-btn" onclick="switchTab('questions')">Browse Questions</button>
+                <button class="tab-btn" onclick="switchTab('about')">About</button>
+            </nav>
+        </header>
+
+        <!-- Home Interface -->
+        <div id="home-interface" class="interface active">
+            <div class="hero-section">
+                <h2>Welcome to Our Church Q&A Platform</h2>
+                <p>Find answers to your faith questions, share your doubts, and grow in your spiritual journey</p>
+                <div class="hero-buttons">
+                    <button class="primary-btn" onclick="switchTab('ask')">Ask a Question</button>
+                    <button class="secondary-btn" onclick="switchTab('questions')">Browse Answers</button>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <div class="stat-card">
+                    <h3 id="total-questions">0</h3>
+                    <p>Questions Asked</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="total-answered">0</h3>
+                    <p>Questions Answered</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="total-categories">6</h3>
+                    <p>Categories</p>
+                </div>
+            </div>
+
+            <div class="recent-section">
+                <h2>Recent Questions & Answers</h2>
+                <div id="recent-questions" class="questions-grid">
+                    <!-- Recent questions will be displayed here -->
+                    <div class="no-questions">
+                        <p>No questions yet. Be the first to ask!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ask Question Interface -->
+        <div id="ask-interface" class="interface">
+            <div class="form-container">
+                <h2>Ask Your Question</h2>
+                <p class="form-intro">We're here to help you grow in your faith. No question is too small or too big.</p>
+
+                <form id="question-form">
+                    <div class="form-group">
+                        <label for="question-title">Your Question *</label>
+                        <input type="text" id="question-title" name="questionTitle" placeholder="What would you like to know?" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="question-details">Question Details *</label>
+                        <textarea id="question-details" name="questionDetails" rows="4" placeholder="Please provide more details about your question..." required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="asker-name">Your Name *</label>
+                            <input type="text" id="asker-name" name="askerName" placeholder="Your full name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="asker-email">Your Email *</label>
+                            <input type="email" id="asker-email" name="askerEmail" placeholder="your.email@example.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category *</label>
+                        <select id="category" name="category" required>
+                            <option value="">Select a category</option>
+                            <option value="bible-study">Bible Study</option>
+                            <option value="doctrine">Christian Doctrine</option>
+                            <option value="prayer">Prayer & Spiritual Life</option>
+                            <option value="church-life">Church Life & Community</option>
+                            <option value="faith-doubts">Faith & Doubts</option>
+                            <option value="christian-living">Christian Living</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="is-anonymous">
+                            <input type="checkbox" id="is-anonymous" name="isAnonymous">
+                            Ask anonymously (your name won't be displayed)
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">Submit Question</button>
+                        <button type="button" class="clear-btn" onclick="clearForm()">Clear Form</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Browse Questions Interface -->
+        <div id="questions-interface" class="interface">
+            <div class="browse-container">
+                <div class="search-section">
+                    <h2>Browse Questions & Answers</h2>
+                    <div class="search-filters">
+                        <div class="search-box">
+                            <input type="text" id="search-input" placeholder="Search questions...">
+                            <button onclick="searchQuestions()">🔍 Search</button>
+                        </div>
+                        <div class="filter-dropdown">
+                            <select id="category-filter" onchange="filterByCategory()">
+                                <option value="">All Categories</option>
+                                <option value="bible-study">Bible Study</option>
+                                <option value="doctrine">Christian Doctrine</option>
+                                <option value="prayer">Prayer & Spiritual Life</option>
+                                <option value="church-life">Church Life & Community</option>
+                                <option value="faith-doubts">Faith & Doubts</option>
+                                <option value="christian-living">Christian Living</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="questions-list" class="questions-container">
+                    <!-- Questions will be dynamically loaded here -->
+                    <div class="no-questions">
+                        <p>No questions found. Try adjusting your search or filters.</p>
+                    </div>
+                </div>
+
+                <div class="load-more">
+                    <button id="load-more-btn" onclick="loadMoreQuestions()" style="display: none;">Load More Questions</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Interface -->
+        <div id="about-interface" class="interface">
+            <div class="about-container">
+                <h2>About Our Q&A Platform</h2>
+
+                <div class="about-section">
+                    <h3>VISION</h3>
+                    <ol>
+                        <li><strong>Teach Accurate Knowledge:</strong> To Teach the Accurate knowledge of God's word by the anointing of the Spirit so as to manifest the very Wisdom of Christ and communicate the same wisdom to the people.</li>
+                        <li><strong>Reveal Christ:</strong> To reveal Christ through the thorough exposition of the Scriptures.</li>
+                        <li><strong>Build Strong Believers:</strong> To Build a people armed with in-depth knowledge of the Scriptures and sound in the understanding of Doctrines.</li>
+                        <li><strong>Exercise Authority:</strong> To raise believers who are aware of their rights and privileges in Christ and exercise the promises and authority of God's word.</li>
+                        <li><strong>Deliverance Through Light:</strong> To bring about deliverance through the Light of God's word and Enlightenment by the Spirit of God.</li>
+                        <li><strong>Raise Role Models:</strong> To raise unit members who are rooted in the word and can communicate it, role models both academically and spiritually with the help of the holy spirit.</li>
+                    </ol>
+                </div>
+
+                <div class="about-section">
+                    <h3>How It Works</h3>
+                    <ul>
+                        <li><strong>Ask Questions:</strong> Submit your questions anonymously or with your name</li>
+                        <li><strong>Get Answers:</strong> Church leadership and knowledgeable members provide thoughtful answers</li>
+                        <li><strong>Browse & Learn:</strong> Search through existing questions and answers</li>
+                        <li><strong>Grow Together:</strong> Learn from others' questions and insights</li>
+                    </ul>
+                </div>
+
+                <div class="about-section">
+                    <h3>Guidelines</h3>
+                    <ul>
+                        <li>Be respectful and courteous in all questions and answers</li>
+                        <li>Ask genuine questions seeking understanding</li>
+                        <li>Keep questions focused on faith, doctrine, and Christian living</li>
+                        <li>Be patient as we work to provide thoughtful responses</li>
+                    </ul>
+                </div>
+
+                <div class="contact-section">
+                    <h3>Contact Us</h3>
+                    <p>If you have questions about this platform or need additional support, please contact the phone numbers on WhatsApp:</p>
+                    <p><strong>Pastor Femi:</strong> <a href="https://wa.me/2347025275473" target="_blank" style="color: #25D366;">07025275473</a></p>
+                    <p><strong>Pastor Mauton:</strong> <a href="https://wa.me/2347085165088" target="_blank" style="color: #25D366;">07085165088</a></p>
+                    <p><strong>Pastor Eben:</strong> <a href="https://wa.me/2348092595849" target="_blank" style="color: #25D366;">08092595849</a></p>
+
+                    <div class="socials-section">
+                        <h4>Connect With Us</h4>
+                        <img src="rcf-socials.png.png" alt="RCF Social Media">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for viewing individual question -->
+    <div id="question-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-body">
+                <!-- Question details will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="rcf-qa-script.js"></script>
+</body>
+</html>
