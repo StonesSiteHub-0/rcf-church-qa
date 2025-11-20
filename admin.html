@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCF Q&A Admin Panel</title>
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <img src="rcf-logo-white.png.png" alt="RCF Logo" class="login-logo">
+                <h2>RCF Q&A Admin Panel</h2>
+                <p>Authorized Access Only</p>
+            </div>
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="admin-password">Admin Password</label>
+                    <input type="password" id="admin-password" placeholder="Enter admin password" required>
+                </div>
+                <button type="submit" class="login-btn">Login to Admin Panel</button>
+            </form>
+            <div class="login-footer">
+                <p>Contact system administrator if you need access</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="admin-dashboard" style="display: none;">
+        <header class="admin-header">
+            <div class="admin-header-left">
+                <img src="rcf-logo-white.png.png" alt="RCF Logo" class="header-logo">
+                <h1>RCF Q&A Admin Panel</h1>
+            </div>
+            <div class="admin-header-right">
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            <!-- Statistics Section -->
+            <div class="stats-section">
+                <div class="stat-card">
+                    <h3 id="total-questions-admin">0</h3>
+                    <p>Total Questions</p>
+                </div>
+                <div class="stat-card pending">
+                    <h3 id="pending-questions-admin">0</h3>
+                    <p>Pending Answers</p>
+                </div>
+                <div class="stat-card answered">
+                    <h3 id="answered-questions-admin">0</h3>
+                    <p>Answered Questions</p>
+                </div>
+            </div>
+
+            <!-- Filter and Search -->
+            <div class="admin-controls">
+                <div class="search-box">
+                    <input type="text" id="admin-search" placeholder="Search questions...">
+                    <button onclick="searchAdminQuestions()">🔍 Search</button>
+                </div>
+                <div class="filter-controls">
+                    <select id="status-filter" onchange="filterAdminQuestions()">
+                        <option value="">All Questions</option>
+                        <option value="pending">Pending Only</option>
+                        <option value="answered">Answered Only</option>
+                    </select>
+                    <select id="category-filter-admin" onchange="filterAdminQuestions()">
+                        <option value="">All Categories</option>
+                        <option value="bible-study">Bible Study</option>
+                        <option value="doctrine">Christian Doctrine</option>
+                        <option value="prayer">Prayer & Spiritual Life</option>
+                        <option value="church-life">Church Life & Community</option>
+                        <option value="faith-doubts">Faith & Doubts</option>
+                        <option value="christian-living">Christian Living</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Questions List -->
+            <div class="questions-admin-container">
+                <div id="admin-questions-list">
+                    <!-- Questions will be dynamically loaded here -->
+                    <div class="no-questions">
+                        <p>No questions found. Questions submitted by users will appear here.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load More -->
+            <div class="load-more">
+                <button id="load-more-admin" onclick="loadMoreAdminQuestions()" style="display: none;">Load More Questions</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Answer Question Modal -->
+    <div id="answer-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAnswerModal()">&times;</span>
+            <div class="modal-header">
+                <h2>Answer Question</h2>
+            </div>
+            <div class="modal-body">
+                <div class="question-details">
+                    <h3 id="modal-question-title"></h3>
+                    <div class="question-meta">
+                        <span id="modal-asker-name"></span>
+                        <span id="modal-question-date"></span>
+                        <span id="modal-question-category"></span>
+                    </div>
+                    <div class="question-content">
+                        <h4>Question:</h4>
+                        <p id="modal-question-details"></p>
+                    </div>
+                    <div class="answerer-info">
+                        <label for="answerer-name">Your Name:</label>
+                        <input type="text" id="answerer-name" value="Pastor Femi">
+                    </div>
+                </div>
+
+                <form id="answer-form">
+                    <div class="form-group">
+                        <label for="answer-text">Your Answer: *</label>
+                        <textarea id="answer-text" rows="6" placeholder="Write your answer here..." required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn" onclick="closeAnswerModal()">Cancel</button>
+                        <button type="submit" class="submit-answer-btn">Submit Answer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Question Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <div class="modal-header">
+                <h2>Edit Question</h2>
+            </div>
+            <div class="modal-body">
+                <form id="edit-form">
+                    <div class="form-group">
+                        <label for="edit-title">Question Title:</label>
+                        <input type="text" id="edit-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-details">Question Details:</label>
+                        <textarea id="edit-details" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-category">Category:</label>
+                        <select id="edit-category" required>
+                            <option value="bible-study">Bible Study</option>
+                            <option value="doctrine">Christian Doctrine</option>
+                            <option value="prayer">Prayer & Spiritual Life</option>
+                            <option value="church-life">Church Life & Community</option>
+                            <option value="faith-doubts">Faith & Doubts</option>
+                            <option value="christian-living">Christian Living</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+                        <button type="submit" class="save-btn">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>
